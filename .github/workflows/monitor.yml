@@ -2,8 +2,18 @@ name: Monitor Bilety Tajlandia
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # co 15 minut
-  workflow_dispatch:  # możliwość ręcznego uruchomienia
+    - cron: '*/15 * * * *'   # co 15 minut - sprawdzanie nowych ofert
+    - cron: '0 6 * * *'       # codziennie o 8:00 czasu polskiego (UTC+2)
+  workflow_dispatch:
+    inputs:
+      run_type:
+        description: 'Typ uruchomienia'
+        required: false
+        default: 'check'
+        type: choice
+        options:
+          - check
+          - summary
 
 jobs:
   check-flights:
@@ -33,6 +43,7 @@ jobs:
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
+          RUN_TYPE: ${{ github.event.inputs.run_type || (github.event.schedule == '0 6 * * *' && 'summary' || 'check') }}
         run: python monitor.py
 
       - name: Zapisz stan
