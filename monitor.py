@@ -3,11 +3,22 @@ import json
 import os
 import hashlib
 import re
+from datetime import datetime
 
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
-URL = "https://biletyczarterowe.r.pl/szukaj?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=false&przylotDo&przylotOd&wiek%5B%5D=1989-10-30&wylotDo&wylotOd"
-API_URL = "https://biletyczarterowe.r.pl/api/loty?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=false&wiek%5B%5D=1989-10-30"
+RUN_TYPE = os.environ.get("RUN_TYPE", "check")  # "check" lub "summary"
+
+URLS = {
+    "tam_i_z_powrotem": "https://biletyczarterowe.r.pl/szukaj?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=false&przylotDo&przylotOd&wiek%5B%5D=1989-10-30&wylotDo&wylotOd",
+    "tylko_tam": "https://biletyczarterowe.r.pl/szukaj?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=true&przylotDo&przylotOd&wiek%5B%5D=1989-10-30&wylotDo&wylotOd",
+}
+
+API_URLS = {
+    "tam_i_z_powrotem": "https://biletyczarterowe.r.pl/api/loty?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=false&wiek%5B%5D=1989-10-30",
+    "tylko_tam": "https://biletyczarterowe.r.pl/api/loty?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=true&wiek%5B%5D=1989-10-30",
+}
+
 STATE_FILE = "last_state.json"
 
 HEADERS = {
@@ -16,9 +27,15 @@ HEADERS = {
     "Referer": "https://biletyczarterowe.r.pl/",
 }
 
+LABELS = {
+    "tam_i_z_powrotem": "✈️↩️ Tam i z powrotem",
+    "tylko_tam": "✈️ Tylko tam (one-way)",
+}
+
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    requests.post(url, json={"chat_id": CHAT_ID, "text": message, "parse_mode": "HTML"})
+    r = requests.post(url, json={"chat_id": CHAT_ID, "text": message, "parse_mode": "HTML"})
+    print(f"Telegram: {r.status_code}")
 
 def load_state():
     if os.path.exists(STATE_FILE):
@@ -30,89 +47,129 @@ def save_state(state):
     with open(STATE_FILE, "w") as f:
         json.dump(state, f)
 
-def try_api():
-    """Próbuje pobrać dane z API jeśli istnieje"""
+def try_api(key):
     try:
-        r = requests.get(API_URL, headers=HEADERS, timeout=15)
-        print(f"API status: {r.status_code}, pierwsze 200 znaków: {r.text[:200]}")
+        r = requests.get(API_URLS[key], headers=HEADERS, timeout=15)
+        print(f"[{key}] API status: {r.status_code}, podgląd: {r.text[:150]}")
         if r.status_code == 200 and r.text.strip().startswith("["):
             data = r.json()
-            print(f"API zwróciło {len(data)} ofert")
+            print(f"[{key}] API zwróciło {len(data)} ofert")
             return data
     except Exception as e:
-        print(f"API niedostępne: {e}")
+        print(f"[{key}] API błąd: {e}")
     return None
 
-def get_page_hash():
-    """Pobiera stronę i zwraca hash jej zawartości"""
-    r = requests.get(URL, headers=HEADERS, timeout=15)
-    # Wycinamy dynamiczne elementy (czas, daty itp.) żeby nie było fałszywych alarmów
+def get_page_hash(key):
+    r = requests.get(URLS[key], headers=HEADERS, timeout=15)
     content = r.text
-    # Usuwamy znaczniki czasu które mogą się zmieniać przy każdym odświeżeniu
     content = re.sub(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', '', content)
     content = re.sub(r'"timestamp":\d+', '', content)
-    return hashlib.md5(content.encode()).hexdigest(), len(content)
+    return hashlib.md5(content.encode()).hexdigest()
 
-def main():
-    print("=== Monitor Bilety Tajlandia ===")
+def format_offer(offer, key):
+    cena = offer.get('cena') or offer.get('price') or offer.get('cenaPln') or '?'
+    data = offer.get('dataWylotu') or offer.get('departure') or offer.get('wylot') or '?'
+    hotel = offer.get('hotel') or offer.get('nazwa') or offer.get('hotelNazwa') or ''
+    dest = offer.get('dokad') or offer.get('destination') or ('BKK/HKT')
+    hotel_str = f"\n🏨 {hotel}" if hotel else ""
+    return f"📅 {data} | 💰 {cena} zł | 🌏 {dest}{hotel_str}"
+
+def check_new_offers():
+    """Sprawdza nowe oferty i wysyła alert jeśli coś nowego"""
     previous = load_state()
     first_run = not previous
+    new_state = {}
+    all_new = {}
 
-    # Najpierw spróbuj API
-    offers = try_api()
+    for key in URLS:
+        offers = try_api(key)
 
-    if offers is not None:
-        # Mamy dane z API - śledzimy konkretne oferty
-        current_ids = set(
-            str(o.get("id") or o.get("flightId") or o.get("lotId") or json.dumps(o, sort_keys=True))
-            for o in offers
-        )
-        previous_ids = set(previous.get("offer_ids", []))
-
-        print(f"Obecne oferty: {len(current_ids)}, poprzednie: {len(previous_ids)}")
-
-        if not first_run:
-            new_offers = [o for o in offers if str(o.get("id") or o.get("flightId") or o.get("lotId") or json.dumps(o, sort_keys=True)) not in previous_ids]
-            if new_offers:
-                for offer in new_offers:
-                    msg = (
-                        f"✈️ <b>Nowy bilet do Tajlandii!</b>\n\n"
-                        f"🗓 Wylot: {offer.get('dataWylotu') or offer.get('departure') or '?'}\n"
-                        f"💰 Cena: {offer.get('cena') or offer.get('price') or '?'} zł\n"
-                        f"🏨 {offer.get('hotel') or offer.get('nazwa') or ''}\n"
-                        f"🔗 <a href='{URL}'>Zobacz ofertę</a>"
-                    )
-                    send_telegram(msg)
-                    print(f"Wysłano powiadomienie o nowej ofercie!")
-            else:
-                print("Brak nowych ofert.")
-        else:
-            print(f"Pierwsze uruchomienie — zapisuję {len(current_ids)} ofert jako bazę.")
-            send_telegram(f"✅ Monitor uruchomiony!\nZnaleziono <b>{len(current_ids)}</b> ofert do Tajlandii (BKK/HKT).\nBędziesz powiadamiany o nowych! ✈️")
-
-        save_state({"offer_ids": list(current_ids)})
-
-    else:
-        # Fallback: hash całej strony
-        print("Używam metody hash strony...")
-        current_hash, page_size = get_page_hash()
-        previous_hash = previous.get("page_hash")
-        print(f"Hash obecny: {current_hash}, poprzedni: {previous_hash}, rozmiar: {page_size}")
-
-        if first_run:
-            print("Pierwsze uruchomienie — zapisuję hash.")
-            send_telegram(f"✅ Monitor uruchomiony!\nŚledzę zmiany na stronie z biletami do Tajlandii (BKK/HKT).\nBędziesz powiadamiany gdy pojawią się nowe oferty! ✈️")
-        elif current_hash != previous_hash:
-            print("Strona się zmieniła! Wysyłam powiadomienie.")
-            send_telegram(
-                f"✈️ <b>Uwaga! Strona z biletami się zmieniła!</b>\n\n"
-                f"Mogły pojawić się nowe bilety do Tajlandii (BKK/HKT).\n\n"
-                f"🔗 <a href='{URL}'>Sprawdź teraz</a>"
+        if offers is not None:
+            offer_ids = set(
+                str(o.get("id") or o.get("flightId") or o.get("lotId") or json.dumps(o, sort_keys=True))
+                for o in offers
             )
-        else:
-            print("Brak zmian.")
+            prev_ids = set(previous.get(f"{key}_ids", []))
+            new_state[f"{key}_ids"] = list(offer_ids)
+            new_state[f"{key}_offers"] = offers  # zapisz dla dziennego podsumowania
 
-        save_state({"page_hash": current_hash})
+            if not first_run:
+                new_offers = [o for o in offers if str(o.get("id") or o.get("flightId") or o.get("lotId") or json.dumps(o, sort_keys=True)) not in prev_ids]
+                if new_offers:
+                    all_new[key] = new_offers
+            else:
+                new_state[f"{key}_offers"] = offers
+        else:
+            # Fallback hash
+            current_hash = get_page_hash(key)
+            prev_hash = previous.get(f"{key}_hash")
+            new_state[f"{key}_hash"] = current_hash
+
+            if not first_run and prev_hash and current_hash != prev_hash:
+                all_new[key] = []  # pusta lista = zmiana ale nie wiemy co
+
+    if first_run:
+        counts = []
+        for key in URLS:
+            offers = new_state.get(f"{key}_offers") or []
+            counts.append(f"{LABELS[key]}: <b>{len(offers)}</b> ofert")
+        send_telegram(
+            f"✅ <b>Monitor biletów uruchomiony!</b>\n\n"
+            + "\n".join(counts) +
+            f"\n\nBędziesz powiadamiany o nowych ofertach co 15 minut.\n"
+            f"Codziennie o 8:00 dostaniesz podsumowanie. ✈️"
+        )
+    elif all_new:
+        for key, new_offers in all_new.items():
+            if new_offers:
+                lines = [format_offer(o, key) for o in new_offers[:5]]
+                msg = (
+                    f"🆕 <b>Nowe bilety — {LABELS[key]}!</b>\n\n"
+                    + "\n\n".join(lines) +
+                    f"\n\n🔗 <a href='{URLS[key]}'>Zobacz wszystkie</a>"
+                )
+            else:
+                msg = (
+                    f"🆕 <b>Zmiana na stronie — {LABELS[key]}!</b>\n\n"
+                    f"Mogły pojawić się nowe bilety.\n"
+                    f"🔗 <a href='{URLS[key]}'>Sprawdź teraz</a>"
+                )
+            send_telegram(msg)
+    else:
+        print("Brak nowych ofert.")
+
+    save_state({**previous, **new_state})
+
+def daily_summary():
+    """Wysyła dzienne podsumowanie wszystkich ofert"""
+    previous = load_state()
+    msg_parts = [f"☀️ <b>Dzienne podsumowanie biletów do Tajlandii</b>\n{datetime.now().strftime('%d.%m.%Y')}\n"]
+
+    for key in URLS:
+        offers = previous.get(f"{key}_offers")
+        msg_parts.append(f"\n<b>{LABELS[key]}:</b>")
+
+        if offers:
+            # Sortuj po cenie jeśli możliwe
+            try:
+                offers_sorted = sorted(offers, key=lambda o: float(str(o.get('cena') or o.get('price') or o.get('cenaPln') or 9999).replace(',', '.')))
+            except Exception:
+                offers_sorted = offers
+
+            lines = [format_offer(o, key) for o in offers_sorted[:8]]
+            msg_parts.append("\n".join(lines))
+            if len(offers) > 8:
+                msg_parts.append(f"... i {len(offers) - 8} więcej")
+            msg_parts.append(f"🔗 <a href='{URLS[key]}'>Pokaż wszystkie ({len(offers)})</a>")
+        else:
+            msg_parts.append("Brak danych (strona nie udostępnia API)")
+            msg_parts.append(f"🔗 <a href='{URLS[key]}'>Sprawdź ręcznie</a>")
+
+    send_telegram("\n".join(msg_parts))
 
 if __name__ == "__main__":
-    main()
+    print(f"=== RUN_TYPE: {RUN_TYPE} ===")
+    if RUN_TYPE == "summary":
+        daily_summary()
+    else:
+        check_new_offers()
