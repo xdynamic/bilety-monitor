@@ -1,35 +1,33 @@
 import requests
 import json
 import os
-import hashlib
-import re
 from datetime import datetime
 
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
-RUN_TYPE = os.environ.get("RUN_TYPE", "check")  # "check" lub "summary"
+RUN_TYPE = os.environ.get("RUN_TYPE", "check")
 
-URLS = {
-    "tam_i_z_powrotem": "https://biletyczarterowe.r.pl/szukaj?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=false&przylotDo&przylotOd&wiek%5B%5D=1989-10-30&wylotDo&wylotOd",
-    "tylko_tam": "https://biletyczarterowe.r.pl/szukaj?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=true&przylotDo&przylotOd&wiek%5B%5D=1989-10-30&wylotDo&wylotOd",
+API = {
+    "tam_i_z_powrotem": "https://biletyczarterowe.r.pl/api/v4.0/wyszukiwanie/wyszukaj?iataDokad%5B%5D=BKK&iataDokad%5B%5D=HKT&oneWay=false&dataUrodzenia%5B%5D=1989-10-30&dataWylotuMin=&dataWylotuMax=&dataPrzylotuMin=&dataPrzylotuMax=",
+    "tylko_tam":        "https://biletyczarterowe.r.pl/api/v4.0/wyszukiwanie/wyszukaj?iataDokad%5B%5D=BKK&iataDokad%5B%5D=HKT&oneWay=true&dataUrodzenia%5B%5D=1989-10-30&dataWylotuMin=&dataWylotuMax=&dataPrzylotuMin=&dataPrzylotuMax=",
 }
 
-API_URLS = {
-    "tam_i_z_powrotem": "https://biletyczarterowe.r.pl/api/loty?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=false&wiek%5B%5D=1989-10-30",
-    "tylko_tam": "https://biletyczarterowe.r.pl/api/loty?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=true&wiek%5B%5D=1989-10-30",
+LINKS = {
+    "tam_i_z_powrotem": "https://biletyczarterowe.r.pl/szukaj?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=false&przylotDo&przylotOd&wiek%5B%5D=1989-10-30&wylotDo&wylotOd",
+    "tylko_tam":        "https://biletyczarterowe.r.pl/szukaj?dokad%5B%5D=BKK&dokad%5B%5D=HKT&oneWay=true&przylotDo&przylotOd&wiek%5B%5D=1989-10-30&wylotDo&wylotOd",
+}
+
+LABELS = {
+    "tam_i_z_powrotem": "✈️↩️ Tam i z powrotem",
+    "tylko_tam":        "✈️ Tylko tam (one-way)",
 }
 
 STATE_FILE = "last_state.json"
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Accept": "application/json",
     "Referer": "https://biletyczarterowe.r.pl/",
-}
-
-LABELS = {
-    "tam_i_z_powrotem": "✈️↩️ Tam i z powrotem",
-    "tylko_tam": "✈️ Tylko tam (one-way)",
 }
 
 def send_telegram(message):
@@ -45,127 +43,84 @@ def load_state():
 
 def save_state(state):
     with open(STATE_FILE, "w") as f:
-        json.dump(state, f)
+        json.dump(state, f, ensure_ascii=False)
 
-def try_api(key):
+def fetch_offers(key):
+    r = requests.get(API[key], headers=HEADERS, timeout=15)
+    data = r.json()
+    return data.get("Destynacje", [])
+
+def format_offer(o):
+    data_raw = o.get("TerminWyjazdu", "")
     try:
-        r = requests.get(API_URLS[key], headers=HEADERS, timeout=15)
-        print(f"[{key}] API status: {r.status_code}, podgląd: {r.text[:150]}")
-        if r.status_code == 200 and r.text.strip().startswith("["):
-            data = r.json()
-            print(f"[{key}] API zwróciło {len(data)} ofert")
-            return data
-    except Exception as e:
-        print(f"[{key}] API błąd: {e}")
-    return None
-
-def get_page_hash(key):
-    r = requests.get(URLS[key], headers=HEADERS, timeout=15)
-    content = r.text
-    content = re.sub(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', '', content)
-    content = re.sub(r'"timestamp":\d+', '', content)
-    return hashlib.md5(content.encode()).hexdigest()
-
-def format_offer(offer, key):
-    cena = offer.get('cena') or offer.get('price') or offer.get('cenaPln') or '?'
-    data = offer.get('dataWylotu') or offer.get('departure') or offer.get('wylot') or '?'
-    hotel = offer.get('hotel') or offer.get('nazwa') or offer.get('hotelNazwa') or ''
-    dest = offer.get('dokad') or offer.get('destination') or ('BKK/HKT')
-    hotel_str = f"\n🏨 {hotel}" if hotel else ""
-    return f"📅 {data} | 💰 {cena} zł | 🌏 {dest}{hotel_str}"
+        data = datetime.fromisoformat(data_raw.replace("Z", "")).strftime("%d.%m.%Y")
+    except Exception:
+        data = data_raw[:10]
+    cena = o.get("Cena", "?")
+    nazwa = o.get("Nazwa", "")
+    brand = o.get("DataLayer", {}).get("brand", "")
+    flight_name = o.get("DataLayer", {}).get("name", "")
+    return f"📅 {data}  |  💰 {cena} zł  |  🌏 {nazwa}\n   ✈️ {flight_name}  ({brand})"
 
 def check_new_offers():
-    """Sprawdza nowe oferty i wysyła alert jeśli coś nowego"""
     previous = load_state()
     first_run = not previous
-    new_state = {}
-    all_new = {}
+    new_state = dict(previous)
+    any_new = False
 
-    for key in URLS:
-        offers = try_api(key)
+    for key in API:
+        print(f"Pobieram [{key}]...")
+        offers = fetch_offers(key)
+        print(f"  -> {len(offers)} ofert")
 
-        if offers is not None:
-            offer_ids = set(
-                str(o.get("id") or o.get("flightId") or o.get("lotId") or json.dumps(o, sort_keys=True))
-                for o in offers
-            )
-            prev_ids = set(previous.get(f"{key}_ids", []))
-            new_state[f"{key}_ids"] = list(offer_ids)
-            new_state[f"{key}_offers"] = offers  # zapisz dla dziennego podsumowania
+        current_ids = {str(o["DataLayer"]["id"]): o for o in offers if o.get("DataLayer", {}).get("id")}
+        prev_ids = set(previous.get(f"{key}_ids", []))
 
-            if not first_run:
-                new_offers = [o for o in offers if str(o.get("id") or o.get("flightId") or o.get("lotId") or json.dumps(o, sort_keys=True)) not in prev_ids]
-                if new_offers:
-                    all_new[key] = new_offers
-            else:
-                new_state[f"{key}_offers"] = offers
-        else:
-            # Fallback hash
-            current_hash = get_page_hash(key)
-            prev_hash = previous.get(f"{key}_hash")
-            new_state[f"{key}_hash"] = current_hash
+        new_state[f"{key}_ids"] = list(current_ids.keys())
+        new_state[f"{key}_offers"] = offers
 
-            if not first_run and prev_hash and current_hash != prev_hash:
-                all_new[key] = []  # pusta lista = zmiana ale nie wiemy co
+        if not first_run:
+            new_offers = [o for id, o in current_ids.items() if id not in prev_ids]
+            if new_offers:
+                any_new = True
+                lines = "\n\n".join(format_offer(o) for o in new_offers)
+                send_telegram(
+                    f"🆕 <b>Nowe bilety — {LABELS[key]}!</b>\n\n"
+                    f"{lines}\n\n"
+                    f"🔗 <a href='{LINKS[key]}'>Zobacz na stronie</a>"
+                )
 
     if first_run:
-        counts = []
-        for key in URLS:
-            offers = new_state.get(f"{key}_offers") or []
-            counts.append(f"{LABELS[key]}: <b>{len(offers)}</b> ofert")
+        parts = []
+        for key in API:
+            offers = new_state.get(f"{key}_offers", [])
+            parts.append(f"{LABELS[key]}: <b>{len(offers)}</b> ofert")
         send_telegram(
             f"✅ <b>Monitor biletów uruchomiony!</b>\n\n"
-            + "\n".join(counts) +
-            f"\n\nBędziesz powiadamiany o nowych ofertach co 15 minut.\n"
-            f"Codziennie o 8:00 dostaniesz podsumowanie. ✈️"
+            + "\n".join(parts) +
+            f"\n\nSprawdzam co 15 minut, codziennie o 8:00 podsumowanie. ✈️"
         )
-    elif all_new:
-        for key, new_offers in all_new.items():
-            if new_offers:
-                lines = [format_offer(o, key) for o in new_offers[:5]]
-                msg = (
-                    f"🆕 <b>Nowe bilety — {LABELS[key]}!</b>\n\n"
-                    + "\n\n".join(lines) +
-                    f"\n\n🔗 <a href='{URLS[key]}'>Zobacz wszystkie</a>"
-                )
-            else:
-                msg = (
-                    f"🆕 <b>Zmiana na stronie — {LABELS[key]}!</b>\n\n"
-                    f"Mogły pojawić się nowe bilety.\n"
-                    f"🔗 <a href='{URLS[key]}'>Sprawdź teraz</a>"
-                )
-            send_telegram(msg)
-    else:
+    elif not any_new:
         print("Brak nowych ofert.")
 
-    save_state({**previous, **new_state})
+    save_state(new_state)
 
 def daily_summary():
-    """Wysyła dzienne podsumowanie wszystkich ofert"""
-    previous = load_state()
-    msg_parts = [f"☀️ <b>Dzienne podsumowanie biletów do Tajlandii</b>\n{datetime.now().strftime('%d.%m.%Y')}\n"]
+    today = datetime.now().strftime("%d.%m.%Y")
+    parts = [f"☀️ <b>Podsumowanie biletów do Tajlandii</b>\n{today}\n"]
 
-    for key in URLS:
-        offers = previous.get(f"{key}_offers")
-        msg_parts.append(f"\n<b>{LABELS[key]}:</b>")
-
+    for key in API:
+        offers = fetch_offers(key)
+        parts.append(f"\n<b>{LABELS[key]}:</b>")
         if offers:
-            # Sortuj po cenie jeśli możliwe
-            try:
-                offers_sorted = sorted(offers, key=lambda o: float(str(o.get('cena') or o.get('price') or o.get('cenaPln') or 9999).replace(',', '.')))
-            except Exception:
-                offers_sorted = offers
-
-            lines = [format_offer(o, key) for o in offers_sorted[:8]]
-            msg_parts.append("\n".join(lines))
-            if len(offers) > 8:
-                msg_parts.append(f"... i {len(offers) - 8} więcej")
-            msg_parts.append(f"🔗 <a href='{URLS[key]}'>Pokaż wszystkie ({len(offers)})</a>")
+            offers_sorted = sorted(offers, key=lambda o: o.get("Cena", 9999))
+            lines = "\n\n".join(format_offer(o) for o in offers_sorted)
+            parts.append(lines)
+            parts.append(f"\n🔗 <a href='{LINKS[key]}'>Zobacz wszystkie ({len(offers)})</a>")
         else:
-            msg_parts.append("Brak danych (strona nie udostępnia API)")
-            msg_parts.append(f"🔗 <a href='{URLS[key]}'>Sprawdź ręcznie</a>")
+            parts.append(f"Brak ofert\n🔗 <a href='{LINKS[key]}'>Sprawdź ręcznie</a>")
 
-    send_telegram("\n".join(msg_parts))
+    send_telegram("\n".join(parts))
 
 if __name__ == "__main__":
     print(f"=== RUN_TYPE: {RUN_TYPE} ===")
