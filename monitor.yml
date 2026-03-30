@@ -1,0 +1,42 @@
+name: Monitor Bilety Tajlandia
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # co 15 minut
+  workflow_dispatch:  # możliwość ręcznego uruchomienia
+
+jobs:
+  check-flights:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Restore poprzedni stan
+        uses: actions/cache@v4
+        with:
+          path: last_state.json
+          key: flight-state-${{ github.run_id }}
+          restore-keys: |
+            flight-state-
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Zainstaluj zależności
+        run: pip install requests
+
+      - name: Sprawdź bilety
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python monitor.py
+
+      - name: Zapisz stan
+        uses: actions/cache@v4
+        with:
+          path: last_state.json
+          key: flight-state-${{ github.run_id }}
