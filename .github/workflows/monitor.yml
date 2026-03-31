@@ -2,8 +2,8 @@ name: Monitor Bilety Tajlandia
 
 on:
   schedule:
-    - cron: '*/15 * * * *'   # co 15 minut - sprawdzanie nowych ofert
-    - cron: '0 6 * * *'       # codziennie o 8:00 czasu polskiego (UTC+2)
+    - cron: '*/15 * * * *'   # co 15 minut
+    - cron: '0 6 * * *'       # codziennie o 8:00 PL (UTC+2)
   workflow_dispatch:
     inputs:
       run_type:
@@ -18,18 +18,12 @@ on:
 jobs:
   check-flights:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Restore poprzedni stan
-        uses: actions/cache@v4
-        with:
-          path: last_state.json
-          key: flight-state-${{ github.run_id }}
-          restore-keys: |
-            flight-state-
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -46,8 +40,10 @@ jobs:
           RUN_TYPE: ${{ github.event.inputs.run_type || (github.event.schedule == '0 6 * * *' && 'summary' || 'check') }}
         run: python monitor.py
 
-      - name: Zapisz stan
-        uses: actions/cache@v4
-        with:
-          path: last_state.json
-          key: flight-state-${{ github.run_id }}
+      - name: Zapisz stan do repozytorium
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add state.json
+          git diff --staged --quiet || git commit -m "Update state [skip ci]"
+          git push
