@@ -1,366 +1,114 @@
 {
-  "POP_rt_ids": [
-    "281388"
-  ],
-  "POP_rt_offers": [
-    {
-      "Panstwo": "Dominikana",
-      "Region": "Puerto Plata",
-      "Nazwa": "Puerto Plata",
-      "Klucz": "POP",
-      "TerminWyjazdu": "2026-04-02T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/8624/dominikana-puerto-plata-puerto-plata-wakacje-120996.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/8624/dominikana-puerto-plata-puerto-plata-wakacje-120996.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 19.7893603,
-      "DlugoscGeo": -70.6860831,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/2885/flaga-dominikana-83863.png",
-      "Bagaz": 20,
-      "Cena": 4199,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Dominikana",
-        "id": 281388,
-        "name": "Puerto Plata WAW - POP 02/04/2026",
-        "price": 4199
-      }
+  "POP_rt_data": {
+    "281388": {
+      "cena": 4199,
+      "nazwa": "Puerto Plata",
+      "data": "02.04.2026",
+      "flight": "Puerto Plata WAW - POP 02/04/2026"
     }
-  ],
-  "POP_ow_ids": [
-    "281395"
-  ],
-  "POP_ow_offers": [
-    {
-      "Panstwo": "Dominikana",
-      "Region": "Puerto Plata",
-      "Nazwa": "Puerto Plata",
-      "Klucz": "POP",
-      "TerminWyjazdu": "2026-04-16T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/8624/dominikana-puerto-plata-puerto-plata-wakacje-120996.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/8624/dominikana-puerto-plata-puerto-plata-wakacje-120996.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 19.7893603,
-      "DlugoscGeo": -70.6860831,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/2885/flaga-dominikana-83863.png",
-      "Bagaz": 20,
-      "Cena": 1049,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Dominikana",
-        "id": 281395,
-        "name": "Puerto Plata WAW - POP 16/04/2026",
-        "price": 1049
-      }
+  },
+  "POP_ow_data": {
+    "281395": {
+      "cena": 1049,
+      "nazwa": "Puerto Plata",
+      "data": "16.04.2026",
+      "flight": "Puerto Plata WAW - POP 16/04/2026"
     }
-  ],
-  "LIR_rt_ids": [
-    "283724"
-  ],
-  "LIR_rt_offers": [
-    {
-      "Panstwo": "Kostaryka",
-      "Region": null,
-      "Nazwa": "Liberia",
-      "Klucz": "LIR",
-      "TerminWyjazdu": "2026-12-03T00:00:00Z",
-      "Zdjecie410x410": null,
-      "Zdjecie410x225": null,
-      "SzerokoscGeo": null,
-      "DlugoscGeo": null,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/66/flaga-kostaryka-83868.png",
-      "Bagaz": 20,
-      "Cena": 7000,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Kostaryka",
-        "id": 283724,
-        "name": "Liberia KTW - LIR 03/12/2026",
-        "price": 7000
-      }
+  },
+  "LIR_rt_data": {
+    "283724": {
+      "cena": 7000,
+      "nazwa": "Liberia",
+      "data": "03.12.2026",
+      "flight": "Liberia KTW - LIR 03/12/2026"
     }
-  ],
-  "LIR_ow_ids": [],
-  "LIR_ow_offers": [],
-  "PEN_rt_ids": [
-    "286333"
-  ],
-  "PEN_rt_offers": [
-    {
-      "Panstwo": "Malezja",
-      "Region": "Penang",
-      "Nazwa": "Penang",
-      "Klucz": "PEN",
-      "TerminWyjazdu": "2027-02-17T00:00:00Z",
-      "Zdjecie410x410": null,
-      "Zdjecie410x225": null,
-      "SzerokoscGeo": 5.2959898,
-      "DlugoscGeo": 100.2751656,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/67/flaga-malezja-83892.png",
-      "Bagaz": 20,
-      "Cena": 5499,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Malezja",
-        "id": 286333,
-        "name": "Penang WAW - PEN 17/02/2027",
-        "price": 5499
-      }
+  },
+  "LIR_ow_data": {},
+  "PEN_rt_data": {
+    "286341": {
+      "cena": 5499,
+      "nazwa": "Penang",
+      "data": "03.03.2027",
+      "flight": "Penang WAW - PEN 03/03/2027"
     }
-  ],
-  "PEN_ow_ids": [],
-  "PEN_ow_offers": [],
-  "CUN_PVR_rt_ids": [
-    "283710",
-    "288526"
-  ],
-  "CUN_PVR_rt_offers": [
-    {
-      "Panstwo": "Meksyk",
-      "Region": "Puerto Vallarta",
-      "Nazwa": "Puerto Vallarta",
-      "Klucz": "PVR",
-      "TerminWyjazdu": "2026-12-17T00:00:00Z",
-      "Zdjecie410x410": null,
-      "Zdjecie410x225": null,
-      "SzerokoscGeo": 20.6786852,
-      "DlugoscGeo": -105.2491754,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/68/flaga-meksyk-83870.png",
-      "Bagaz": 20,
-      "Cena": 4499,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Meksyk",
-        "id": 283710,
-        "name": "Puerto Vallarta KTW - PVR 17/12/2026",
-        "price": 4499
-      }
+  },
+  "PEN_ow_data": {},
+  "CUN_PVR_rt_data": {
+    "283710": {
+      "cena": 4499,
+      "nazwa": "Puerto Vallarta",
+      "data": "17.12.2026",
+      "flight": "Puerto Vallarta KTW - PVR 17/12/2026"
     },
-    {
-      "Panstwo": "Meksyk",
-      "Region": "Cancun",
-      "Nazwa": "Cancun",
-      "Klucz": "CUN",
-      "TerminWyjazdu": "2026-12-06T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/765/meksyk-cancun-cancun-wakacje-121585.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/765/meksyk-cancun-cancun-wakacje-121585.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 21.0403409,
-      "DlugoscGeo": -86.87356399,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/68/flaga-meksyk-83870.png",
-      "Bagaz": 20,
-      "Cena": 6599,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Meksyk",
-        "id": 288526,
-        "name": "Cancun WAW - CUN 06/12/2026",
-        "price": 6599
-      }
+    "288526": {
+      "cena": 6599,
+      "nazwa": "Cancun",
+      "data": "06.12.2026",
+      "flight": "Cancun WAW - CUN 06/12/2026"
     }
-  ],
-  "CUN_PVR_ow_ids": [],
-  "CUN_PVR_ow_offers": [],
-  "CMB_rt_ids": [
-    "287819"
-  ],
-  "CMB_rt_offers": [
-    {
-      "Panstwo": "Sri Lanka",
-      "Region": "Zachodnia Sri Lanka",
-      "Nazwa": "Colombo",
-      "Klucz": "CMB",
-      "TerminWyjazdu": "2026-12-06T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/340/sri-lanka-zachodnia-sri-lanka-colombo-wakacje-123766.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/340/sri-lanka-zachodnia-sri-lanka-colombo-wakacje-123766.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 6.8237163,
-      "DlugoscGeo": 79.88988159,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/75/flaga-sri-lanka-83896.png",
-      "Bagaz": 16,
-      "Cena": 4606,
-      "DataLayer": {
-        "brand": "Enter Air",
-        "category": "Sri Lanka",
-        "id": 287819,
-        "name": "Colombo WAW - CMB 06/12/2026",
-        "price": 4606
-      }
+  },
+  "CUN_PVR_ow_data": {},
+  "CMB_rt_data": {
+    "287819": {
+      "cena": 4606,
+      "nazwa": "Colombo",
+      "data": "06.12.2026",
+      "flight": "Colombo WAW - CMB 06/12/2026"
     }
-  ],
-  "CMB_ow_ids": [],
-  "CMB_ow_offers": [],
-  "ZNZ_rt_ids": [
-    "287009"
-  ],
-  "ZNZ_rt_offers": [
-    {
-      "Panstwo": "Tanzania",
-      "Region": "Zanzibar",
-      "Nazwa": "Zanzibar",
-      "Klucz": "ZNZ",
-      "TerminWyjazdu": "2026-12-16T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/826/tanzania-zanzibar-zanzibar-wakacje-189866.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/826/tanzania-zanzibar-zanzibar-wakacje-189866.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": -6.2185336,
-      "DlugoscGeo": 39.221379,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/639/flaga-tanzania-83845.png",
-      "Bagaz": 16,
-      "Cena": 4399,
-      "DataLayer": {
-        "brand": "Enter Air",
-        "category": "Tanzania",
-        "id": 287009,
-        "name": "Zanzibar WAW - ZNZ 16/12/2026",
-        "price": 4399
-      }
+  },
+  "CMB_ow_data": {},
+  "ZNZ_rt_data": {
+    "286924": {
+      "cena": 4399,
+      "nazwa": "Zanzibar",
+      "data": "16.12.2026",
+      "flight": "Zanzibar KTW - ZNZ 16/12/2026"
     }
-  ],
-  "ZNZ_ow_ids": [],
-  "ZNZ_ow_offers": [],
-  "BKK_HKT_rt_ids": [
-    "285789",
-    "288007"
-  ],
-  "BKK_HKT_rt_offers": [
-    {
-      "Panstwo": "Tajlandia",
-      "Region": "Phuket",
-      "Nazwa": "Phuket",
-      "Klucz": "HKT",
-      "TerminWyjazdu": "2027-03-02T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/648/tajlandia-phuket-phuket-wakacje-123796.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/648/tajlandia-phuket-phuket-wakacje-123796.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 8.1110951,
-      "DlugoscGeo": 98.3064646,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/43/flaga-tajlandia-83897.png",
-      "Bagaz": 20,
-      "Cena": 5499,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Tajlandia",
-        "id": 285789,
-        "name": "Phuket WAW - HKT 02/03/2027",
-        "price": 5499
-      }
+  },
+  "ZNZ_ow_data": {},
+  "BKK_HKT_rt_data": {
+    "285726": {
+      "cena": 5499,
+      "nazwa": "Phuket",
+      "data": "04.12.2026",
+      "flight": "Phuket KTW - HKT 04/12/2026"
     },
-    {
-      "Panstwo": "Tajlandia",
-      "Region": "Bangkok",
-      "Nazwa": "Bangkok",
-      "Klucz": "BKK",
-      "TerminWyjazdu": "2027-03-06T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/151/tajlandia-bangkok-bangkok-wakacje-123790.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/151/tajlandia-bangkok-bangkok-wakacje-123790.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 13.9132602,
-      "DlugoscGeo": 100.60419869,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/43/flaga-tajlandia-83897.png",
-      "Bagaz": 20,
-      "Cena": 5499,
-      "DataLayer": {
-        "brand": "World2Fly",
-        "category": "Tajlandia",
-        "id": 288007,
-        "name": "Bangkok POZ - BKK 06/03/2027",
-        "price": 5499
-      }
+    "287972": {
+      "cena": 5499,
+      "nazwa": "Bangkok",
+      "data": "07.11.2026",
+      "flight": "Bangkok POZ - BKK 07/11/2026"
     }
-  ],
-  "BKK_HKT_ow_ids": [],
-  "BKK_HKT_ow_offers": [],
-  "SGN_PQC_rt_ids": [
-    "285824",
-    "287459"
-  ],
-  "SGN_PQC_rt_offers": [
-    {
-      "Panstwo": "Wietnam",
-      "Region": "Region Południowo - Wschodni",
-      "Nazwa": "Ho Chi Minh / Sajgon",
-      "Klucz": "SGN",
-      "TerminWyjazdu": "2026-12-07T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/337/wietnam-region-poludniowo-wschodni-ho-chi-minh-sajgon-wakacje-124109.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/337/wietnam-region-poludniowo-wschodni-ho-chi-minh-sajgon-wakacje-124109.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 10.8184631,
-      "DlugoscGeo": 106.6588245,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/77/flaga-wietnam-83900.png",
-      "Bagaz": 20,
-      "Cena": 5499,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Wietnam",
-        "id": 285824,
-        "name": "Ho Chi Minh / Sajgon KTW - SGN 07/12/2026",
-        "price": 5499
-      }
+  },
+  "BKK_HKT_ow_data": {},
+  "SGN_PQC_rt_data": {
+    "285824": {
+      "cena": 5499,
+      "nazwa": "Ho Chi Minh / Sajgon",
+      "data": "07.12.2026",
+      "flight": "Ho Chi Minh / Sajgon KTW - SGN 07/12/2026"
     },
-    {
-      "Panstwo": "Wietnam",
-      "Region": "Phu Quoc",
-      "Nazwa": "Phu Quoc",
-      "Klucz": "PQC",
-      "TerminWyjazdu": "2027-02-21T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/11007/wietnam-phu-quoc-phu-quoc-wakacje-284412.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/11007/wietnam-phu-quoc-phu-quoc-wakacje-284412.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 10.16938813,
-      "DlugoscGeo": 103.99339427,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/77/flaga-wietnam-83900.png",
-      "Bagaz": 20,
-      "Cena": 5499,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Wietnam",
-        "id": 287459,
-        "name": "Phu Quoc KTW - PQC 21/02/2027",
-        "price": 5499
-      }
+    "287561": {
+      "cena": 5499,
+      "nazwa": "Phu Quoc",
+      "data": "05.11.2026",
+      "flight": "Phu Quoc WAW - PQC 05/11/2026"
     }
-  ],
-  "SGN_PQC_ow_ids": [
-    "243593",
-    "285822"
-  ],
-  "SGN_PQC_ow_offers": [
-    {
-      "Panstwo": "Wietnam",
-      "Region": "Phu Quoc",
-      "Nazwa": "Phu Quoc",
-      "Klucz": "PQC",
-      "TerminWyjazdu": "2026-04-24T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/11007/wietnam-phu-quoc-phu-quoc-wakacje-284412.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/11007/wietnam-phu-quoc-phu-quoc-wakacje-284412.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 10.16938813,
-      "DlugoscGeo": 103.99339427,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/77/flaga-wietnam-83900.png",
-      "Bagaz": 20,
-      "Cena": 900,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Wietnam",
-        "id": 243593,
-        "name": "Phu Quoc WAW - PQC 24/04/2026",
-        "price": 900
-      }
+  },
+  "SGN_PQC_ow_data": {
+    "243593": {
+      "cena": 900,
+      "nazwa": "Phu Quoc",
+      "data": "24.04.2026",
+      "flight": "Phu Quoc WAW - PQC 24/04/2026"
     },
-    {
-      "Panstwo": "Wietnam",
-      "Region": "Region Południowo - Wschodni",
-      "Nazwa": "Ho Chi Minh / Sajgon",
-      "Klucz": "SGN",
-      "TerminWyjazdu": "2026-12-07T00:00:00Z",
-      "Zdjecie410x410": "https://grafiki.r.pl/lokalizacja/337/wietnam-region-poludniowo-wschodni-ho-chi-minh-sajgon-wakacje-124109.jpg?aspect_ratio=410%3A410",
-      "Zdjecie410x225": "https://grafiki.r.pl/lokalizacja/337/wietnam-region-poludniowo-wschodni-ho-chi-minh-sajgon-wakacje-124109.jpg?aspect_ratio=410%3A225",
-      "SzerokoscGeo": 10.8184631,
-      "DlugoscGeo": 106.6588245,
-      "Flaga": "https://grafiki.r.pl/lokalizacja/77/flaga-wietnam-83900.png",
-      "Bagaz": 20,
-      "Cena": 4999,
-      "DataLayer": {
-        "brand": "LOT Charters Dreamliner",
-        "category": "Wietnam",
-        "id": 285822,
-        "name": "Ho Chi Minh / Sajgon KTW - SGN 07/12/2026",
-        "price": 4999
-      }
+    "285802": {
+      "cena": 4999,
+      "nazwa": "Ho Chi Minh / Sajgon",
+      "data": "02.11.2026",
+      "flight": "Ho Chi Minh / Sajgon KTW - SGN 02/11/2026"
     }
-  ],
-  "PMV_rt_ids": [],
-  "PMV_rt_offers": [],
-  "PMV_ow_ids": [],
-  "PMV_ow_offers": []
+  },
+  "PMV_rt_data": {},
+  "PMV_ow_data": {}
 }
