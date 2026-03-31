@@ -69,7 +69,7 @@ def fetch_offers(iata_list, one_way):
         r = requests.get(build_api_url(iata_list, one_way), headers=HEADERS, timeout=15)
         return r.json().get("Destynacje", [])
     except Exception as e:
-        print(f"Błąd pobierania {iata_list}: {e}")
+        print(f"Błąd: {e}")
         return []
 
 def get_offer_id(o):
@@ -81,12 +81,32 @@ def format_date(raw):
     except Exception:
         return raw[:10]
 
-def format_offer(o):
+def parse_flight_name(name):
+    # "Puerto Plata WAW - POP 02/04/2026" → "WAW→POP"
+    try:
+        parts = name.split(" ")
+        arrow_idx = parts.index("-")
+        src = parts[arrow_idx - 1]
+        dst = parts[arrow_idx + 1]
+        return f"{src}→{dst}"
+    except Exception:
+        return name
+
+def format_offer_line(o):
     data = format_date(o.get("TerminWyjazdu", ""))
     cena = o.get("Cena", "?")
     nazwa = o.get("Nazwa", "")
     flight = o.get("DataLayer", {}).get("name", "")
-    return f"  📅 {data}  💰 <b>{cena} zł</b>  {nazwa}\n     🛫 {flight}"
+    trasa = parse_flight_name(flight)
+    return f"<code>{data}  {cena} zł  {nazwa}  {trasa}</code>"
+
+def offer_to_state(o):
+    return {
+        "cena": o.get("Cena"),
+        "nazwa": o.get("Nazwa", ""),
+        "data": format_date(o.get("TerminWyjazdu", "")),
+        "flight": o.get("DataLayer", {}).get("name", ""),
+    }
 
 def check_new_offers():
     previous = load_state()
@@ -103,56 +123,40 @@ def check_new_offers():
             print(f"[{dest['label']} {'OW' if one_way else 'RT'}] → {len(offers)} ofert")
 
             current = {get_offer_id(o): o for o in offers if get_offer_id(o)}
-            prev_data = previous.get(f"{key}_data", {})  # {id: {cena, nazwa, data, flight}}
+            prev_data = previous.get(f"{key}_data", {})
 
-            # Zapisz aktualny stan
-            new_state[f"{key}_data"] = {
-                oid: {
-                    "cena": o.get("Cena"),
-                    "nazwa": o.get("Nazwa"),
-                    "data": format_date(o.get("TerminWyjazdu", "")),
-                    "flight": o.get("DataLayer", {}).get("name", ""),
-                }
-                for oid, o in current.items()
-            }
+            new_state[f"{key}_data"] = {oid: offer_to_state(o) for oid, o in current.items()}
 
             if first_run or not prev_data:
                 continue
 
-            dir_label = "tylko tam" if one_way else "tam i z powrotem"
+            dir_label = "w obie strony" if not one_way else "tylko tam"
             link = build_link(dest["iata"], one_way)
-            header = f"{dest['label']} <i>({dir_label})</i>"
+            tag = f"{dest['label']} ({dir_label}) — <a href='{link}'>zobacz</a>"
 
-            # Nowe oferty (ID których nie było)
             for oid, o in current.items():
                 if oid not in prev_data:
-                    new_lines.append(f"{header}\n{format_offer(o)}\n  🔗 <a href='{link}'>Zobacz</a>")
+                    new_lines.append(f"{tag}\n{format_offer_line(o)}")
 
-            # Zmiany cen (to samo ID, inna cena)
             for oid, o in current.items():
                 if oid in prev_data:
                     stara = prev_data[oid]["cena"]
                     nowa = o.get("Cena")
                     if stara != nowa and stara is not None and nowa is not None:
                         roznica = nowa - stara
-                        strzalka = "⬇️" if roznica < 0 else "⬆️"
-                        flight = prev_data[oid]["flight"]
+                        strzalka = "⬇️ TANIEJ" if roznica < 0 else "⬆️ DROŻEJ"
+                        flight = parse_flight_name(prev_data[oid]["flight"])
                         data = prev_data[oid]["data"]
                         price_lines.append(
-                            f"{header}\n"
-                            f"  🛫 {flight}\n"
-                            f"  📅 {data}\n"
-                            f"  {strzalka} <b>{stara} zł → {nowa} zł</b> ({roznica:+d} zł)\n"
-                            f"  🔗 <a href='{link}'>Zobacz</a>"
+                            f"{tag}\n"
+                            f"<code>{data}  {flight}  {stara} zł → <b>{nowa} zł</b>  ({roznica:+d} zł)  {strzalka}</code>"
                         )
 
-            # Zniknięte oferty
             for oid, prev_o in prev_data.items():
                 if oid not in current:
+                    trasa = parse_flight_name(prev_o["flight"])
                     gone_lines.append(
-                        f"{header}\n"
-                        f"  🛫 {prev_o['flight']}\n"
-                        f"  📅 {prev_o['data']}  💰 {prev_o['cena']} zł"
+                        f"{tag}\n<code>{prev_o['data']}  {prev_o['cena']} zł  {trasa}</code>"
                     )
 
     if first_run:
@@ -168,17 +172,11 @@ def check_new_offers():
         )
     else:
         if new_lines:
-            msg = "🆕 <b>Nowe bilety!</b>\n\n" + "\n\n".join(new_lines)
-            send_telegram(msg[:4096])
-
+            send_telegram("🆕 <b>Nowe bilety</b>\n\n" + "\n\n".join(new_lines))
         if price_lines:
-            msg = "💸 <b>Zmiany cen!</b>\n\n" + "\n\n".join(price_lines)
-            send_telegram(msg[:4096])
-
+            send_telegram("💸 <b>Zmiany cen</b>\n\n" + "\n\n".join(price_lines))
         if gone_lines:
-            msg = "❌ <b>Oferty które zniknęły:</b>\n\n" + "\n\n".join(gone_lines)
-            send_telegram(msg[:4096])
-
+            send_telegram("❌ <b>Zniknęły</b>\n\n" + "\n\n".join(gone_lines))
         if not new_lines and not price_lines and not gone_lines:
             print("Brak zmian.")
 
@@ -186,40 +184,40 @@ def check_new_offers():
 
 def daily_summary():
     today = datetime.now().strftime("%d.%m.%Y")
-    parts = [f"☀️ <b>Podsumowanie biletów — {today}</b>\n"]
+    lines = [f"☀️ <b>Bilety — {today}</b>\n"]
 
     for dest in DESTINATIONS:
-        dest_parts = [f"\n<b>{dest['label']}</b>"]
+        dest_lines = [f"\n<b>{dest['label']}</b>"]
         for one_way in [False, True]:
             offers = fetch_offers(dest["iata"], one_way)
             dir_label = "Tylko tam" if one_way else "Tam i z powrotem"
+            link = build_link(dest["iata"], one_way)
             if offers:
                 offers_sorted = sorted(offers, key=lambda o: o.get("Cena", 9999))
-                lines = "\n".join(format_offer(o) for o in offers_sorted)
-                link = build_link(dest["iata"], one_way)
-                dest_parts.append(f"<i>{dir_label}:</i>\n{lines}\n  🔗 <a href='{link}'>Wszystkie ({len(offers)})</a>")
+                offer_lines = "\n".join(format_offer_line(o) for o in offers_sorted)
+                dest_lines.append(f"<i>{dir_label}:</i> <a href='{link}'>({len(offers)})</a>\n{offer_lines}")
             else:
-                dest_parts.append(f"<i>{dir_label}:</i> brak ofert")
-        parts.extend(dest_parts)
+                dest_lines.append(f"<i>{dir_label}:</i> brak")
+        lines.extend(dest_lines)
 
-    full_msg = "\n".join(parts)
+    full_msg = "\n".join(lines)
     if len(full_msg) <= 4096:
         send_telegram(full_msg)
     else:
-        send_telegram(f"☀️ <b>Podsumowanie biletów — {today}</b>")
+        send_telegram(f"☀️ <b>Bilety — {today}</b>")
         for dest in DESTINATIONS:
-            dest_parts = [f"<b>{dest['label']}</b>"]
+            dest_lines = [f"<b>{dest['label']}</b>"]
             for one_way in [False, True]:
                 offers = fetch_offers(dest["iata"], one_way)
                 dir_label = "Tylko tam" if one_way else "Tam i z powrotem"
+                link = build_link(dest["iata"], one_way)
                 if offers:
                     offers_sorted = sorted(offers, key=lambda o: o.get("Cena", 9999))
-                    lines = "\n".join(format_offer(o) for o in offers_sorted)
-                    link = build_link(dest["iata"], one_way)
-                    dest_parts.append(f"<i>{dir_label}:</i>\n{lines}\n  🔗 <a href='{link}'>Wszystkie ({len(offers)})</a>")
+                    offer_lines = "\n".join(format_offer_line(o) for o in offers_sorted)
+                    dest_lines.append(f"<i>{dir_label}:</i> <a href='{link}'>({len(offers)})</a>\n{offer_lines}")
                 else:
-                    dest_parts.append(f"<i>{dir_label}:</i> brak ofert")
-            send_telegram("\n".join(dest_parts))
+                    dest_lines.append(f"<i>{dir_label}:</i> brak")
+            send_telegram("\n".join(dest_lines))
 
 if __name__ == "__main__":
     print(f"=== RUN_TYPE: {RUN_TYPE} ===")
