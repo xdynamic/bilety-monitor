@@ -67,17 +67,17 @@
   },
   "ZNZ_ow_data": {},
   "BKK_HKT_rt_data": {
-    "285751": {
+    "285716": {
       "cena": 5499,
       "nazwa": "Phuket",
-      "data": "05.03.2027",
-      "flight": "Phuket KTW - HKT 05/03/2027"
+      "data": "30.10.2026",
+      "flight": "Phuket KTW - HKT 30/10/2026"
     },
-    "287965": {
+    "288007": {
       "cena": 5499,
       "nazwa": "Bangkok",
       "data": "06.03.2027",
-      "flight": "Bangkok KTW - BKK 06/03/2027"
+      "flight": "Bangkok POZ - BKK 06/03/2027"
     }
   },
   "BKK_HKT_ow_data": {},
@@ -88,11 +88,11 @@
       "data": "02.11.2026",
       "flight": "Ho Chi Minh / Sajgon KTW - SGN 02/11/2026"
     },
-    "287561": {
+    "287467": {
       "cena": 5499,
       "nazwa": "Phu Quoc",
-      "data": "05.11.2026",
-      "flight": "Phu Quoc WAW - PQC 05/11/2026"
+      "data": "07.03.2027",
+      "flight": "Phu Quoc KTW - PQC 07/03/2027"
     }
   },
   "SGN_PQC_ow_data": {
