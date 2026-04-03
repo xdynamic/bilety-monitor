@@ -25,7 +25,7 @@
   },
   "LIR_ow_data": {},
   "PEN_rt_data": {
-    "286272": {
+    "286273": {
       "cena": 5499,
       "nazwa": "Penang",
       "data": "04.11.2026",
@@ -67,28 +67,28 @@
   },
   "ZNZ_ow_data": {},
   "BKK_HKT_rt_data": {
-    "288006": {
+    "287929": {
       "cena": 5499,
       "nazwa": "Bangkok",
-      "data": "06.03.2027",
-      "flight": "Bangkok POZ - BKK 06/03/2027"
+      "data": "31.10.2026",
+      "flight": "Bangkok KTW - BKK 31/10/2026"
     },
-    "285716": {
+    "285762": {
       "cena": 5499,
       "nazwa": "Phuket",
-      "data": "30.10.2026",
-      "flight": "Phuket KTW - HKT 30/10/2026"
+      "data": "01.12.2026",
+      "flight": "Phuket WAW - HKT 01/12/2026"
     }
   },
   "BKK_HKT_ow_data": {},
   "SGN_PQC_rt_data": {
-    "285823": {
+    "285803": {
       "cena": 5499,
       "nazwa": "Ho Chi Minh / Sajgon",
-      "data": "07.12.2026",
-      "flight": "Ho Chi Minh / Sajgon KTW - SGN 07/12/2026"
+      "data": "02.11.2026",
+      "flight": "Ho Chi Minh / Sajgon KTW - SGN 02/11/2026"
     },
-    "287475": {
+    "287476": {
       "cena": 5499,
       "nazwa": "Phu Quoc",
       "data": "01.11.2026",
