@@ -1,114 +1,20 @@
 {
-  "POP_rt_data": {
-    "281392": {
-      "cena": 2699,
-      "nazwa": "Puerto Plata",
-      "data": "09.04.2026",
-      "flight": "Puerto Plata WAW - POP 09/04/2026"
-    }
-  },
-  "POP_ow_data": {
-    "281391": {
-      "cena": 899,
-      "nazwa": "Puerto Plata",
-      "data": "09.04.2026",
-      "flight": "Puerto Plata WAW - POP 09/04/2026"
-    }
-  },
-  "LIR_rt_data": {
-    "283724": {
-      "cena": 7000,
-      "nazwa": "Liberia",
-      "data": "03.12.2026",
-      "flight": "Liberia KTW - LIR 03/12/2026"
-    }
-  },
+  "POP_rt_data": {},
+  "POP_ow_data": {},
+  "LIR_rt_data": {},
   "LIR_ow_data": {},
-  "PEN_rt_data": {
-    "286333": {
-      "cena": 5499,
-      "nazwa": "Penang",
-      "data": "17.02.2027",
-      "flight": "Penang WAW - PEN 17/02/2027"
-    }
-  },
+  "PEN_rt_data": {},
   "PEN_ow_data": {},
-  "CUN_PVR_rt_data": {
-    "283719": {
-      "cena": 4499,
-      "nazwa": "Puerto Vallarta",
-      "data": "18.02.2027",
-      "flight": "Puerto Vallarta KTW - PVR 18/02/2027"
-    },
-    "288526": {
-      "cena": 6599,
-      "nazwa": "Cancun",
-      "data": "06.12.2026",
-      "flight": "Cancun WAW - CUN 06/12/2026"
-    }
-  },
+  "CUN_PVR_rt_data": {},
   "CUN_PVR_ow_data": {},
-  "CMB_rt_data": {
-    "287819": {
-      "cena": 4606,
-      "nazwa": "Colombo",
-      "data": "06.12.2026",
-      "flight": "Colombo WAW - CMB 06/12/2026"
-    }
-  },
+  "CMB_rt_data": {},
   "CMB_ow_data": {},
-  "ZNZ_rt_data": {
-    "287094": {
-      "cena": 4399,
-      "nazwa": "Zanzibar",
-      "data": "16.12.2026",
-      "flight": "Zanzibar POZ - ZNZ 16/12/2026"
-    }
-  },
+  "ZNZ_rt_data": {},
   "ZNZ_ow_data": {},
-  "BKK_HKT_rt_data": {
-    "287929": {
-      "cena": 5499,
-      "nazwa": "Bangkok",
-      "data": "31.10.2026",
-      "flight": "Bangkok KTW - BKK 31/10/2026"
-    },
-    "285785": {
-      "cena": 5499,
-      "nazwa": "Phuket",
-      "data": "16.02.2027",
-      "flight": "Phuket WAW - HKT 16/02/2027"
-    }
-  },
+  "BKK_HKT_rt_data": {},
   "BKK_HKT_ow_data": {},
-  "SGN_PQC_rt_data": {
-    "285803": {
-      "cena": 5499,
-      "nazwa": "Ho Chi Minh / Sajgon",
-      "data": "02.11.2026",
-      "flight": "Ho Chi Minh / Sajgon KTW - SGN 02/11/2026"
-    },
-    "287576": {
-      "cena": 5499,
-      "nazwa": "Phu Quoc",
-      "data": "03.12.2026",
-      "flight": "Phu Quoc WAW - PQC 03/12/2026"
-    }
-  },
-  "SGN_PQC_ow_data": {
-    "243593": {
-      "cena": 1050,
-      "nazwa": "Phu Quoc",
-      "data": "24.04.2026",
-      "flight": "Phu Quoc WAW - PQC 24/04/2026"
-    },
-    "285822": {
-      "cena": 4999,
-      "nazwa": "Ho Chi Minh / Sajgon",
-      "data": "07.12.2026",
-      "flight": "Ho Chi Minh / Sajgon KTW - SGN 07/12/2026"
-    }
-  },
+  "SGN_PQC_rt_data": {},
+  "SGN_PQC_ow_data": {},
   "PMV_rt_data": {},
   "PMV_ow_data": {}
 }
