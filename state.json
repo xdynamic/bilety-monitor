@@ -25,20 +25,20 @@
   },
   "LIR_ow_data": {},
   "PEN_rt_data": {
-    "286288": {
+    "286272": {
       "cena": 5499,
       "nazwa": "Penang",
-      "data": "02.12.2026",
-      "flight": "Penang WAW - PEN 02/12/2026"
+      "data": "04.11.2026",
+      "flight": "Penang WAW - PEN 04/11/2026"
     }
   },
   "PEN_ow_data": {},
   "CUN_PVR_rt_data": {
-    "283721": {
+    "283719": {
       "cena": 4499,
       "nazwa": "Puerto Vallarta",
-      "data": "04.03.2027",
-      "flight": "Puerto Vallarta KTW - PVR 04/03/2027"
+      "data": "18.02.2027",
+      "flight": "Puerto Vallarta KTW - PVR 18/02/2027"
     },
     "288526": {
       "cena": 6599,
@@ -58,26 +58,26 @@
   },
   "CMB_ow_data": {},
   "ZNZ_rt_data": {
-    "287009": {
+    "286924": {
       "cena": 4399,
       "nazwa": "Zanzibar",
       "data": "16.12.2026",
-      "flight": "Zanzibar WAW - ZNZ 16/12/2026"
+      "flight": "Zanzibar KTW - ZNZ 16/12/2026"
     }
   },
   "ZNZ_ow_data": {},
   "BKK_HKT_rt_data": {
-    "285752": {
+    "285763": {
       "cena": 5499,
       "nazwa": "Phuket",
-      "data": "05.03.2027",
-      "flight": "Phuket KTW - HKT 05/03/2027"
+      "data": "01.12.2026",
+      "flight": "Phuket WAW - HKT 01/12/2026"
     },
-    "287940": {
+    "287932": {
       "cena": 5499,
       "nazwa": "Bangkok",
-      "data": "05.12.2026",
-      "flight": "Bangkok KTW - BKK 05/12/2026"
+      "data": "07.11.2026",
+      "flight": "Bangkok KTW - BKK 07/11/2026"
     }
   },
   "BKK_HKT_ow_data": {
@@ -89,17 +89,17 @@
     }
   },
   "SGN_PQC_rt_data": {
-    "285803": {
+    "285824": {
       "cena": 5499,
       "nazwa": "Ho Chi Minh / Sajgon",
-      "data": "02.11.2026",
-      "flight": "Ho Chi Minh / Sajgon KTW - SGN 02/11/2026"
+      "data": "07.12.2026",
+      "flight": "Ho Chi Minh / Sajgon KTW - SGN 07/12/2026"
     },
-    "287648": {
+    "287459": {
       "cena": 5499,
       "nazwa": "Phu Quoc",
-      "data": "01.04.2027",
-      "flight": "Phu Quoc WAW - PQC 01/04/2027"
+      "data": "21.02.2027",
+      "flight": "Phu Quoc KTW - PQC 21/02/2027"
     }
   },
   "SGN_PQC_ow_data": {
