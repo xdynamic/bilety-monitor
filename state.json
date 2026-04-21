@@ -25,11 +25,11 @@
   },
   "LIR_ow_data": {},
   "PEN_rt_data": {
-    "286333": {
+    "286341": {
       "cena": 5499,
       "nazwa": "Penang",
-      "data": "17.02.2027",
-      "flight": "Penang WAW - PEN 17/02/2027"
+      "data": "03.03.2027",
+      "flight": "Penang WAW - PEN 03/03/2027"
     }
   },
   "PEN_ow_data": {},
@@ -67,32 +67,32 @@
   },
   "ZNZ_ow_data": {},
   "BKK_HKT_rt_data": {
-    "285748": {
+    "285725": {
       "cena": 5499,
       "nazwa": "Phuket",
-      "data": "19.02.2027",
-      "flight": "Phuket KTW - HKT 19/02/2027"
+      "data": "04.12.2026",
+      "flight": "Phuket KTW - HKT 04/12/2026"
     },
-    "287980": {
+    "288003": {
       "cena": 5499,
       "nazwa": "Bangkok",
-      "data": "05.12.2026",
-      "flight": "Bangkok POZ - BKK 05/12/2026"
+      "data": "20.02.2027",
+      "flight": "Bangkok POZ - BKK 20/02/2027"
     }
   },
   "BKK_HKT_ow_data": {},
   "SGN_PQC_rt_data": {
-    "285824": {
+    "285803": {
       "cena": 5499,
       "nazwa": "Ho Chi Minh / Sajgon",
-      "data": "07.12.2026",
-      "flight": "Ho Chi Minh / Sajgon KTW - SGN 07/12/2026"
+      "data": "02.11.2026",
+      "flight": "Ho Chi Minh / Sajgon KTW - SGN 02/11/2026"
     },
-    "287459": {
+    "287649": {
       "cena": 5499,
       "nazwa": "Phu Quoc",
-      "data": "21.02.2027",
-      "flight": "Phu Quoc KTW - PQC 21/02/2027"
+      "data": "01.04.2027",
+      "flight": "Phu Quoc WAW - PQC 01/04/2027"
     }
   },
   "SGN_PQC_ow_data": {
