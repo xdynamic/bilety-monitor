@@ -1,18 +1,18 @@
 {
   "POP_rt_data": {
-    "289941": {
+    "290073": {
       "cena": 6999,
-      "nazwa": "Puerto Plata",
-      "data": "09.12.2026",
-      "flight": "Puerto Plata KTW - POP 09/12/2026"
-    }
-  },
-  "POP_ow_data": {
-    "290072": {
-      "cena": 3999,
       "nazwa": "Puerto Plata",
       "data": "01.03.2027",
       "flight": "Puerto Plata WAW - POP 01/03/2027"
+    }
+  },
+  "POP_ow_data": {
+    "290092": {
+      "cena": 3999,
+      "nazwa": "Puerto Plata",
+      "data": "05.04.2027",
+      "flight": "Puerto Plata WAW - POP 05/04/2027"
     }
   },
   "LIR_rt_data": {
@@ -25,11 +25,11 @@
   },
   "LIR_ow_data": {},
   "PEN_rt_data": {
-    "286273": {
+    "286332": {
       "cena": 5499,
       "nazwa": "Penang",
-      "data": "04.11.2026",
-      "flight": "Penang WAW - PEN 04/11/2026"
+      "data": "17.02.2027",
+      "flight": "Penang WAW - PEN 17/02/2027"
     }
   },
   "PEN_ow_data": {},
@@ -58,22 +58,22 @@
   },
   "CMB_ow_data": {},
   "ZNZ_rt_data": {
-    "287009": {
+    "286924": {
       "cena": 4399,
       "nazwa": "Zanzibar",
       "data": "16.12.2026",
-      "flight": "Zanzibar WAW - ZNZ 16/12/2026"
+      "flight": "Zanzibar KTW - ZNZ 16/12/2026"
     }
   },
   "ZNZ_ow_data": {},
   "BKK_HKT_rt_data": {
-    "285788": {
+    "285751": {
       "cena": 5499,
       "nazwa": "Phuket",
-      "data": "02.03.2027",
-      "flight": "Phuket WAW - HKT 02/03/2027"
+      "data": "05.03.2027",
+      "flight": "Phuket KTW - HKT 05/03/2027"
     },
-    "287931": {
+    "287932": {
       "cena": 5499,
       "nazwa": "Bangkok",
       "data": "07.11.2026",
@@ -88,11 +88,11 @@
       "data": "07.12.2026",
       "flight": "Ho Chi Minh / Sajgon KTW - SGN 07/12/2026"
     },
-    "287495": {
+    "287620": {
       "cena": 5499,
       "nazwa": "Phu Quoc",
-      "data": "06.12.2026",
-      "flight": "Phu Quoc POZ - PQC 06/12/2026"
+      "data": "18.02.2027",
+      "flight": "Phu Quoc WAW - PQC 18/02/2027"
     }
   },
   "SGN_PQC_ow_data": {
